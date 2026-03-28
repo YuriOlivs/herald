@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atualização do Pedido</title>
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: #f4f6f8;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          background-color: #ffffff;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .header {
+          background: linear-gradient(135deg, #1f2937, #111827);
+          color: #ffffff;
+          padding: 20px;
+          text-align: center;
+        }
+
+        .header h1 {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 600;
+        }
+
+        .content {
+          padding: 24px;
+          color: #1f2937;
+        }
+
+        .status-box {
+          background-color: #f0f9ff;
+          border-left: 4px solid #0284c7;
+          padding: 16px;
+          border-radius: 4px;
+          margin: 20px 0;
+        }
+
+        .status-title {
+          font-weight: bold;
+          color: #0284c7;
+          margin-bottom: 6px;
+        }
+
+        .order-info {
+          margin-top: 16px;
+          font-size: 14px;
+        }
+
+        .order-info p {
+          margin: 6px 0;
+        }
+
+        .product-list {
+          margin-top: 20px;
+          border-top: 1px solid #e5e7eb;
+          padding-top: 16px;
+        }
+
+        .product-item {
+          display: flex;
+          justify-content: space-between;
+          font-size: 14px;
+          margin-bottom: 8px;
+        }
+
+        .cta {
+          text-align: center;
+          margin: 24px 0 8px;
+        }
+
+        .cta a {
+          background-color: #0284c7;
+          color: #ffffff;
+          padding: 12px 20px;
+          text-decoration: none;
+          border-radius: 6px;
+          font-size: 14px;
+          display: inline-block;
+        }
+
+        .footer {
+          background-color: #f9fafb;
+          padding: 16px;
+          text-align: center;
+          font-size: 12px;
+          color: #6b7280;
+        }
+
+        .divider {
+          height: 1px;
+          background-color: #e5e7eb;
+          margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <h1>BUCKETS</h1>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+        <p>Olá, <strong>{{customerName}}</strong>,</p>
+
+        <p>Temos uma atualização sobre o seu pedido <strong>#{{orderId}}</strong>.</p>
+
+        <!-- STATUS BOX -->
+        <div class="status-box">
+            <div class="status-title">Status do pedido</div>
+            <div>{{status}}</div>
+            <div style="margin-top: 6px; font-size: 13px; color: #374151;">
+                {{statusDescription}}
+            </div>
+        </div>
+
+        <!-- ORDER INFO -->
+        <div class="order-info">
+            <p><strong>Data do pedido:</strong> {{orderDate}}</p>
+            <p><strong>Método de envio:</strong> {{shippmentMethod}}</p>
+            <p><strong>Código de rastreio:</strong> {{trackingCode}}</p>
+        </div>
+
+        <!-- PRODUCTS -->
+        <div class="product-list">
+            <strong>Itens do pedido</strong>
+
+            <!-- ITEM LOOP -->
+            {{orderProducts}}
+            <!-- /ITEM LOOP -->
+        </div>
+
+        <!-- CTA -->
+        <div class="cta">
+            <a href="{{trackingUrl}}" target="_blank">Acompanhar pedido</a>
+        </div>
+
+        <div class="divider"></div>
+
+        <p style="font-size: 13px; color: #6b7280;">
+            Caso você não reconheça este pedido, entre em contato com nosso suporte.
+        </p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>BUCKETS • São Paulo, São Paulo</p>
+        <p>buckets@email.com | 11 9999-9999</p>
+        <p>Este é um e-mail automático, por favor não responda.</p>
+    </div>
+</div>
+</body>
+</html>
