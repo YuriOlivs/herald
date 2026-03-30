@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Component
 @EnableConfigurationProperties(NotificationGatewayProperties.class)
 @RequiredArgsConstructor
-public class ApiKeyAuthenticationFilter implements GlobalFilter {
+public class    ApiKeyAuthenticationFilter implements GlobalFilter {
     private final NotificationGatewayProperties gatewayProperties;
 
     @Override
