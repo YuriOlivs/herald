@@ -19,14 +19,14 @@ public class NotificationClient {
 
     public NotificationResponseDTO findById(UUID id) {
         return restTemplate.getForObject(
-                "http://localhost:8080/notifications",
+                "http://localhost:8083/notifications",
                 NotificationResponseDTO.class
         );
     }
 
     public NotificationResponseDTO save(NotificationRequestDTO dto) {
         return restTemplate.postForObject(
-                "http://localhost:8080/notifications/internal",
+                "http://localhost:8083/notifications/internal",
                 dto,
                 NotificationResponseDTO.class
         );
@@ -34,7 +34,7 @@ public class NotificationClient {
 
     public ScheduledPayloadResponseDTO getNotificationPayload(SchedulePayloadRequestDTO dto) {
         return restTemplate.postForObject(
-                "http://localhost:8080/notifications/internal/payload",
+                "http://localhost:8083/notifications/internal/payload",
                 dto,
                 ScheduledPayloadResponseDTO.class
         );
