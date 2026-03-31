@@ -1,6 +1,6 @@
 package com.yuriolivs.notification_gateway.config;
 
-import com.yuriolivs.notification_gateway.properties.GatewayProperties;
+import com.yuriolivs.notification_gateway.properties.NotificationGatewayProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 @EnableWebFluxSecurity
-@EnableConfigurationProperties(GatewayProperties.class)
+@EnableConfigurationProperties(NotificationGatewayProperties.class)
 public class SecurityConfig {
 
     @Bean

@@ -1,6 +1,6 @@
 package com.yuriolivs.notification_gateway.filter;
 
-import com.yuriolivs.notification_gateway.properties.GatewayProperties;
+import com.yuriolivs.notification_gateway.properties.NotificationGatewayProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -11,10 +11,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-@EnableConfigurationProperties(GatewayProperties.class)
+@EnableConfigurationProperties(NotificationGatewayProperties.class)
 @RequiredArgsConstructor
-public class ApiKeyAuthenticationFilter implements GlobalFilter {
-    private final GatewayProperties gatewayProperties;
+public class    ApiKeyAuthenticationFilter implements GlobalFilter {
+    private final NotificationGatewayProperties gatewayProperties;
 
     @Override
     public Mono<Void> filter(

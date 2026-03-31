@@ -11,12 +11,16 @@ public class RoutingConfig {
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("scheduler", r -> r
-                        .path("/scheduler/**")
-                        .uri("http://localhost:8082")
+                        .path("/schedule/**")
+                        .uri("http://localhost:8082/schedule")
                 )
-                .route("service", r -> r
-                        .path("/notification/**")
-                        .uri("http://localhost:8081")
+                .route("notifications", r -> r
+                        .path("/notifications/**")
+                        .uri("http://localhost:8083/notifications")
+                )
+                .route("webhooks", r -> r
+                        .path("/webhooks/**")
+                        .uri("http://localhost:8083/webhooks")
                 )
                 .build();
     }
