@@ -5,7 +5,6 @@ import com.yuriolivs.notification.shared.domain.schedule.dto.SchedulePayloadRequ
 import com.yuriolivs.notification.shared.domain.schedule.dto.ScheduledPayloadResponseDTO;
 import com.yuriolivs.notification_scheduler.config.SecurityProperties;
 import com.yuriolivs.notification_scheduler.domain.notification.dto.NotificationRequestDTO;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -16,21 +15,30 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 @Component
-@AllArgsConstructor
 public class NotificationClient {
     @Autowired
     private final RestTemplate restTemplate;
-    private final SecurityProperties securityProperties;
+    private HttpHeaders headers;
 
     private static final String INTERNAL_KEY_HEADER = "X-Internal-Key";
 
-    public NotificationResponseDTO findById(UUID id) {
+
+    public NotificationClient(
+            RestTemplate restTemplate,
+            SecurityProperties securityProperties
+    ) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(INTERNAL_KEY_HEADER, securityProperties.getInternalKey());
+
+        this.restTemplate = restTemplate;
+        this.headers = headers;
+    }
+
+    public NotificationResponseDTO findById(UUID id) {
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         return restTemplate.exchange(
-                "http://localhost:8083/notifications",
+                "http://localhost:8083/notifications/" + id,
                 HttpMethod.GET,
                 entity,
                 NotificationResponseDTO.class
@@ -39,28 +47,24 @@ public class NotificationClient {
     }
 
     public NotificationResponseDTO save(NotificationRequestDTO dto) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(INTERNAL_KEY_HEADER, securityProperties.getInternalKey());
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
-
         return restTemplate.exchange(
                 "http://localhost:8083/notifications/internal",
                 HttpMethod.POST,
-                entity,
+                buildEntity(dto),
                 NotificationResponseDTO.class
         ).getBody();
     }
 
     public ScheduledPayloadResponseDTO getNotificationPayload(SchedulePayloadRequestDTO dto) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(INTERNAL_KEY_HEADER, securityProperties.getInternalKey());
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
-
         return restTemplate.exchange(
                 "http://localhost:8083/notifications/internal/payload",
                 HttpMethod.POST,
-                entity,
+                buildEntity(dto),
                 ScheduledPayloadResponseDTO.class
         ).getBody();
+    }
+
+    private <T> HttpEntity<T> buildEntity(T body) {
+        return new HttpEntity<>(body, headers);
     }
 }
