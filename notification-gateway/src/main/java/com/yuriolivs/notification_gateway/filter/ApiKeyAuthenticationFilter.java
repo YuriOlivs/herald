@@ -2,6 +2,7 @@ package com.yuriolivs.notification_gateway.filter;
 
 import com.yuriolivs.notification_gateway.properties.NotificationGatewayProperties;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
 @Component
 @EnableConfigurationProperties(NotificationGatewayProperties.class)
 @RequiredArgsConstructor
+@Slf4j
 public class    ApiKeyAuthenticationFilter implements GlobalFilter {
     private final NotificationGatewayProperties gatewayProperties;
 
