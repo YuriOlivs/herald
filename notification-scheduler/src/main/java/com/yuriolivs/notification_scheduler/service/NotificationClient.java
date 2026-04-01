@@ -5,7 +5,6 @@ import com.yuriolivs.notification.shared.domain.schedule.dto.SchedulePayloadRequ
 import com.yuriolivs.notification.shared.domain.schedule.dto.ScheduledPayloadResponseDTO;
 import com.yuriolivs.notification_scheduler.config.SecurityProperties;
 import com.yuriolivs.notification_scheduler.domain.notification.dto.NotificationRequestDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,7 +15,6 @@ import java.util.UUID;
 
 @Component
 public class NotificationClient {
-    @Autowired
     private final RestTemplate restTemplate;
     private HttpHeaders headers;
 

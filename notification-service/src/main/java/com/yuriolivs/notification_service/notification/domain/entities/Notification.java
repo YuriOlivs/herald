@@ -5,6 +5,7 @@ import com.yuriolivs.notification.shared.domain.notification.enums.NotificationP
 import com.yuriolivs.notification.shared.domain.notification.enums.NotificationStatus;
 import com.yuriolivs.notification.shared.domain.notification.enums.NotificationType;
 import com.yuriolivs.notification_service.notification.domain.dto.NotificationRequestDTO;
+import com.yuriolivs.notification_service.security.EncryptionConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,8 +36,6 @@ public class Notification {
 
     private NotificationChannel channel;
 
-    private String recipient;
-
     private String template;
 
     private NotificationType type;
@@ -48,7 +47,11 @@ public class Notification {
 
     private LocalDateTime createdAt;
 
+    @Convert(converter = EncryptionConverter.class)
     private String payload;
+
+    @Convert(converter = EncryptionConverter.class)
+    private String recipient;
 
     public Notification(
         String idempotencyKey,

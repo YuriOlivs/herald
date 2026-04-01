@@ -2,4 +2,4 @@ spring.application.name=notification-gateway
 
 server.port=8080
 
-gateway.api-key=minha-api-key-secreta
+gateway.api-key=

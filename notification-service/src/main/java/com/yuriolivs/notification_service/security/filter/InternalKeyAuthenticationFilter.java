@@ -1,6 +1,6 @@
-package com.yuriolivs.notification_service.config.security.filter;
+package com.yuriolivs.notification_service.security.filter;
 
-import com.yuriolivs.notification_service.config.security.SecurityProperties;
+import com.yuriolivs.notification_service.security.SecurityProperties;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,5 +32,11 @@ public class InternalKeyAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return !path.contains("/internal");
     }
 }

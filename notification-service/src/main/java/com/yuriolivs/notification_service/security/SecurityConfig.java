@@ -1,6 +1,6 @@
-package com.yuriolivs.notification_service.config.security;
+package com.yuriolivs.notification_service.security;
 
-import com.yuriolivs.notification_service.config.security.filter.InternalKeyAuthenticationFilter;
+import com.yuriolivs.notification_service.security.filter.InternalKeyAuthenticationFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +25,7 @@ public class SecurityConfig {
             .formLogin(form -> form.disable())
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(
-                            "notifications/internal/**",
+                            "/notifications/internal/**",
                             "/internal/**"
                     )
                     .authenticated()
