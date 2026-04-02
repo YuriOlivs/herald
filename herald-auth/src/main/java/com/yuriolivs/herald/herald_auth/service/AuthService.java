@@ -46,7 +46,11 @@ public class AuthService implements AuthServiceInterface{
     @Override
     public Tenant createTenant(CreateTenantRequest dto) {
         String tenantName = dto.name();
-        Tenant tenantToBeCreated = new Tenant(tenantName, true);
+
+        Tenant tenantToBeCreated = Tenant.builder()
+                .name(tenantName)
+                .active(true)
+                .build();
 
         return tenantRepo.save(tenantToBeCreated);
     }
