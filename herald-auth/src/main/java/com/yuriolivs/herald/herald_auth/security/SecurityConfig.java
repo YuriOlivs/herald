@@ -1,6 +1,7 @@
 package com.yuriolivs.herald.herald_auth.security;
 
 import com.yuriolivs.herald.herald_auth.security.filter.InternalKeyAuthenticationFilter;
+import com.yuriolivs.herald.herald_auth.security.properties.SecurityProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableConfigurationProperties(SecurityConfig.class)
+@EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityConfig {
 
     @Bean

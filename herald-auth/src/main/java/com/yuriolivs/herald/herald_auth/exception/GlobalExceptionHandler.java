@@ -1,8 +1,8 @@
-package com.yuriolivs.herald_service.exception;
+package com.yuriolivs.herald.herald_auth.exception;
 
-import com.yuriolivs.notification.shared.exceptions.ErrorResponse;
-import com.yuriolivs.notification.shared.exceptions.http.HttpException;
-import com.yuriolivs.notification.shared.exceptions.http.HttpStatus;
+import com.yuriolivs.herald.shared.exceptions.ErrorResponse;
+import com.yuriolivs.herald.shared.exceptions.http.HttpException;
+import com.yuriolivs.herald.shared.exceptions.http.HttpStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

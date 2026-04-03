@@ -9,6 +9,7 @@ import com.yuriolivs.herald.herald_auth.security.ApiKeyGenerator;
 import com.yuriolivs.herald.shared.exceptions.http.HttpNotFoundException;
 import com.yuriolivs.herald.shared.exceptions.http.HttpUnauthorizedException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthService implements AuthServiceInterface{
-    private PasswordEncoder encoder;
+    @Autowired
     private TenantRepository tenantRepo;
+
+    @Autowired
     private ApiKeyRepository keyRepo;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     @Override
     public Tenant validateApiKey(ApiKeyValidateRequest dto) {
