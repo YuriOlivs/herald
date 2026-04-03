@@ -1,6 +1,5 @@
 package com.yuriolivs.herald.herald_auth.domain.entities;
 
-import com.yuriolivs.herald.herald_auth.security.converter.EncryptionConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +12,8 @@ import java.util.UUID;
 @Table(
         name = "api_keys"
 )
+@Builder
+@AllArgsConstructor
 public class ApiKey {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -20,18 +21,21 @@ public class ApiKey {
 
     private UUID tenantId;
 
-    @Convert(converter = EncryptionConverter.class)
-    private String key;
+    private String prefix;
+
+    private String secretHash;
 
     private boolean active;
 
     public ApiKey(
         UUID tenantId,
-        String key,
+        String prefix,
+        String secretHash,
         boolean active
     ) {
         this.tenantId = tenantId;
-        this.key = key;
+        this.prefix = prefix;
+        this.secretHash = secretHash;
         this.active = active;
     }
 }

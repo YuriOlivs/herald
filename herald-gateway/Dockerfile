@@ -4,20 +4,20 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /build
 
-COPY notification-shared/pom.xml notification-shared/pom.xml
-COPY notification-shared/src notification-shared/src
-RUN mvn -f notification-shared/pom.xml install -DskipTests
+COPY herald-shared/pom.xml herald-shared/pom.xml
+COPY herald-shared/src herald-shared/src
+RUN mvn -f herald-shared/pom.xml install -DskipTests
 
-COPY notification-gateway/pom.xml notification-gateway/pom.xml
-COPY notification-gateway/src notification-gateway/src
-RUN mvn -f notification-gateway/pom.xml package -DskipTests
+COPY herald-gateway/pom.xml herald-gateway/pom.xml
+COPY herald-gateway/src herald-gateway/src
+RUN mvn -f herald-gateway/pom.xml package -DskipTests
 
 # STAGE 2: RUNTIME
 FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-COPY --from=build /build/notification-gateway/target/*.jar app.jar
+COPY --from=build /build/herald-gateway/target/*.jar app.jar
 
 EXPOSE 8080
 

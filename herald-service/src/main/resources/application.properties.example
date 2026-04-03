@@ -30,7 +30,5 @@ spring.rabbitmq.port=5672
 spring.rabbitmq.username=guest
 spring.rabbitmq.password=guest
 
-auth.key=
-auth.header=
-
-crypto.base64key=
+security.internal-key=
+security.encryptation-key=

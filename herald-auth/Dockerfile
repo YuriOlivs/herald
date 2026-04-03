@@ -8,17 +8,17 @@ COPY herald-shared/pom.xml herald-shared/pom.xml
 COPY herald-shared/src herald-shared/src
 RUN mvn -f herald-shared/pom.xml install -DskipTests
 
-COPY herald-scheduler/pom.xml herald-scheduler/pom.xml
-COPY herald-scheduler/src herald-scheduler/src
-RUN mvn -f herald-scheduler/pom.xml package -DskipTests
+COPY herald-auth/pom.xml herald-auth/pom.xml
+COPY herald-serivce/src herald-auth/src
+RUN mvn -f herald-auth/pom.xml package -DskipTests
 
 # STAGE 2: RUNTIME
 FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-COPY --from=build /build/herald-scheduler/target/*.jar app.jar
+COPY --from=build /build/herald-auth/target/*.jar app.jar
 
-#EXPOSE 8082
+EXPOSE 8084
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

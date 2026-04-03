@@ -1,9 +1,7 @@
 package com.yuriolivs.herald.herald_auth.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -14,6 +12,8 @@ import java.util.UUID;
     name = "tenants"
 )
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

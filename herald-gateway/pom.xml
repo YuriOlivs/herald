@@ -56,8 +56,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.yuriolivs.notification</groupId>
-			<artifactId>notification-shared</artifactId>
+			<groupId>com.yuriolivs.herald</groupId>
+			<artifactId>herald-shared</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
