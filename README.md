@@ -21,33 +21,43 @@ Each microservice is entirely decoupled and can be deployed independently:
 
 * **herald-shared:** A internal Maven library shared across services. It contains common domain models, DTOs, and exception definitions, avoiding code duplication across the system. It is not a deployable service — it is packaged and installed locally as a dependency during the build process.
 
-#### Gateway Flow
 ```mermaid
-graph LR
-    User((User)) --> GW[herald-gateway]
-    GW -->|1. Validate| Auth[herald-auth]
-    Auth -->|OK| Decision{Tipo de Envio?}
-    Decision -->|Immediate| Service[herald-service]
-    Decision -->|Scheduled| Sched[herald-scheduler]
-```
+---
+config:
+  layout: elk
+---
+flowchart LR
+ subgraph Sistema_Herald["System processing"]
+        Auth["herald-auth"]
+        GW["herald-gateway"]
+        Service["herald-service"]
+        Sched["herald-scheduler"]
+        DB_S[("PostgreSQL")]
+        RMQ{"RabbitMQ"}
+        DB_V[("PostgreSQL")]
+        Channel["Check channel"]
+  end
+    User(("Usuário")) -- Request --> GW
+    GW -- "1. Auth Check" --> Auth
+    Auth -- "2a. Direct" --> Service
+    Auth -- "2b. Schedule" --> Sched
+    Sched -- "3b. Persist" --> DB_S
+    Service -- "3a. Publish" --> RMQ
+    Sched -- "4b. Polling & Publish" --> RMQ
+    RMQ -- "5. Consume" --> Service
+    Service -- "4a. Persist" --> DB_V
+    Service -- "6. Send" --> Channel
+    Channel -- 7a. SMTP --> Email["Email Service"]
+    Channel -- 7b. Bot API --> TG["Telegram API"]
 
-### Scheduler Flow
-```mermaid
-graph LR
-    Sched[herald-scheduler] -->|1. Polling| DB[(PostgreSQL)]
-    DB -->|2. Scheduled messages| Sched
-    Sched -->|3. Publishes| RMQ{RabbitMQ}
-    RMQ -.->|Next step | Service[herald-service]
-```
-
-#### Service Flow
-```mermaid
-graph LR
-    Input((Input)) --> Service[herald-service]
-    Service -->|1. Publishes| RMQ{RabbitMQ}
-    RMQ -->|2. Consumes| Service
-    Service -->|3. Sends| Channels[Email / Telegram]
-    Service -->|4. Log| DB[(PostgreSQL)]
+     Auth:::service
+     GW:::service
+     Service:::service
+     Sched:::service
+     DB_S:::infra
+     RMQ:::infra
+     DB_V:::infra
+     Channel:::service
 ```
 
 ## 🧠 Architecture Evolution
