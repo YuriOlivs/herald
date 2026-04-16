@@ -1,4 +1,4 @@
-package com.yuriolivs.herald_scheduler.config;
+package com.yuriolivs.herald_scheduler.config.properties;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

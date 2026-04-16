@@ -1,9 +1,9 @@
-package com.yuriolivs.herald_scheduler.service;
+package com.yuriolivs.herald_scheduler.client;
 
 import com.yuriolivs.notification.shared.domain.notification.dto.NotificationResponseDTO;
 import com.yuriolivs.notification.shared.domain.schedule.dto.SchedulePayloadRequestDTO;
 import com.yuriolivs.notification.shared.domain.schedule.dto.ScheduledPayloadResponseDTO;
-import com.yuriolivs.herald_scheduler.config.SecurityProperties;
+import com.yuriolivs.herald_scheduler.config.properties.SecurityProperties;
 import com.yuriolivs.herald_scheduler.domain.notification.dto.NotificationRequestDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

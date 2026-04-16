@@ -26,14 +26,14 @@ public class NotificationService implements NotificationServiceInterface {
     private ObjectMapper objectMapper;
 
     @Override
-    public Notification handleNotificationRequest(NotificationRequestDTO dto) throws IOException, MessagingException {
+    public Notification handleNotificationRequest(NotificationRequestDTO dto, UUID tenantId) {
         Optional<Notification> existing = repo.findByIdempotencyKey(dto.idempotencyKey());
         if (existing.isPresent()) {
             return existing.get();
         }
 
         String jsonPayload = objectMapper.writeValueAsString(dto.payload());
-        Notification notification = Notification.fromRequest(dto, jsonPayload);
+        Notification notification = Notification.fromRequest(dto, jsonPayload, tenantId);
 
         repo.save(notification);
         publisher.publish(notification, dto.payload());
@@ -52,13 +52,15 @@ public class NotificationService implements NotificationServiceInterface {
     }
 
     @Override
-    public Notification save(NotificationRequestDTO dto) {
+    public Notification save(NotificationRequestDTO dto, UUID tenantId) {
         Optional<Notification> existing = repo.findByIdempotencyKey(dto.idempotencyKey());
         if (existing.isPresent()) throw new HttpBadRequestException("Notification Request already exists.");
 
         String jsonPayload = objectMapper.writeValueAsString(dto.payload());
 
-        Notification notification = Notification.fromRequest(dto, jsonPayload);
+        Notification notification = Notification
+                .fromRequest(dto, jsonPayload, tenantId);
+
         return repo.save(notification);
     }
 

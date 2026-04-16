@@ -21,9 +21,12 @@ public class NotificationController {
 
     @PostMapping
     public ResponseEntity<NotificationResponseDTO> handleNotificationRequest(
-            @RequestBody @Valid NotificationRequestDTO dto
+            @RequestBody @Valid NotificationRequestDTO dto,
+            @RequestHeader("X-Tenant-Id") UUID tenantId
     ) throws MessagingException, IOException {
-        NotificationResponseDTO response = NotificationResponseDTO.from(service.handleNotificationRequest(dto));
+        NotificationResponseDTO response = NotificationResponseDTO
+                .from(service.handleNotificationRequest(dto, tenantId));
+
         return ResponseEntity.ok(response);
     }
 
@@ -31,16 +34,21 @@ public class NotificationController {
     public ResponseEntity<NotificationResponseDTO> getNotification(
             @PathVariable UUID id
     ) {
-        NotificationResponseDTO response = NotificationResponseDTO.from(service.findById(id));
+        NotificationResponseDTO response = NotificationResponseDTO
+                .from(service.findById(id));
+
         return ResponseEntity.ok(response);
     }
 
     // <---- Internal Endpoints ---->
     @PostMapping("/internal")
     public ResponseEntity<NotificationResponseDTO> postNotification(
-            @RequestBody @Valid NotificationRequestDTO dto
+            @RequestBody @Valid NotificationRequestDTO dto,
+            @RequestHeader("X-Tenant-Id") UUID tenantId
     ) {
-        NotificationResponseDTO response = NotificationResponseDTO.from(service.save(dto));
+        NotificationResponseDTO response = NotificationResponseDTO
+                .from(service.save(dto, tenantId));
+
         return ResponseEntity.ok(response);
     }
 

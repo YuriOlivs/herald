@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface SchedulerServiceInterface {
     ScheduledNotification findScheduledNotification(UUID id);
-    ScheduledNotification scheduleMessage(ScheduleRequestDTO dto);
+    ScheduledNotification scheduleMessage(ScheduleRequestDTO dto, UUID tenantId);
     ScheduledNotification updateStatus(ScheduleStatus status, UUID notificationId);
     List<ScheduledNotification> findAllScheduledMessages();
     List<ScheduledNotification> findAllScheduledMessagesByDate(LocalDateTime date);

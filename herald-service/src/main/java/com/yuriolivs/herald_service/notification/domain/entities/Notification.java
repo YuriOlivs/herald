@@ -52,6 +52,8 @@ public class Notification {
     @Convert(converter = EncryptionConverter.class)
     private String recipient;
 
+    private UUID tenantId;
+
     public Notification(
         String idempotencyKey,
         NotificationChannel channel,
@@ -61,7 +63,8 @@ public class Notification {
         NotificationStatus status,
         NotificationPriority priority,
         LocalDateTime createdAt,
-        String payload
+        String payload,
+        UUID tenantId
     ) {
         this.idempotencyKey = idempotencyKey;
         this.channel = channel;
@@ -72,9 +75,10 @@ public class Notification {
         this.priority = priority;
         this.createdAt = createdAt;
         this.payload = payload;
+        this.tenantId = tenantId;
     }
 
-    public static Notification fromRequest(NotificationRequestDTO dto, String payload) {
+    public static Notification fromRequest(NotificationRequestDTO dto, String payload, UUID tenantId) {
         return new Notification(
                 dto.idempotencyKey(),
                 dto.channel(),
@@ -84,7 +88,8 @@ public class Notification {
                 NotificationStatus.CREATED,
                 dto.priority(),
                 LocalDateTime.now(),
-                payload
+                payload,
+                tenantId
         );
     }
 }
