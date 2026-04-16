@@ -40,6 +40,6 @@ public class    ApiKeyAuthenticationFilter implements GlobalFilter {
                 .request(r -> r.header("X-Tenant-Id", tenantId.toString()))
                 .build();
 
-        return chain.filter(exchange);
+        return chain.filter(mutatedExchange);
     }
 }
