@@ -21,6 +21,41 @@ Each microservice is entirely decoupled and can be deployed independently:
 
 * **herald-shared:** A internal Maven library shared across services. It contains common domain models, DTOs, and exception definitions, avoiding code duplication across the system. It is not a deployable service — it is packaged and installed locally as a dependency during the build process.
 
+```mermaid
+flowchart LR
+ subgraph Sistema_Herald["System processing"]
+        Auth["herald-auth"]
+        GW["herald-gateway"]
+        Service["herald-service"]
+        Sched["herald-scheduler"]
+        DB_S[("PostgreSQL")]
+        RMQ{"RabbitMQ"}
+        DB_V[("PostgreSQL")]
+        Channel["Check channel"]
+  end
+    User(("Client")) -- Request --> GW
+    GW -- "1. Auth Check" --> Auth
+    Auth -- "2a. Direct" --> Service
+    Auth -- "2b. Schedule" --> Sched
+    Sched -- "3b. Persist" --> DB_S
+    Service -- "3a. Publish" --> RMQ
+    Sched -- "4b. Polling & Publish" --> RMQ
+    RMQ -- "5. Consume" --> Service
+    Service -- "4a. Persist" --> DB_V
+    Service -- "6. Send" --> Channel
+    Channel -- 7a. SMTP --> Email["Email Service"]
+    Channel -- 7b. Bot API --> TG["Telegram API"]
+
+     Auth:::service
+     GW:::service
+     Service:::service
+     Sched:::service
+     DB_S:::infra
+     RMQ:::infra
+     DB_V:::infra
+     Channel:::service
+```
+
 ## 🧠 Architecture Evolution
 
 This project was originally designed as a multi-repository microservices system, where each service was maintained in its own repository.
@@ -37,6 +72,7 @@ Why Monorepo?
 - Easier dependency sharing via herald-shared
 - Better version consistency across services
 - Reduced overhead in managing multiple repositories
+
 ## ⚙️ Tech Stack
 
 **Backend:** Java, Spring Boot (Spring Security, WebFlux)
