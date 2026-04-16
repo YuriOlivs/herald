@@ -3,7 +3,7 @@ services:
 # INFRASTRUCTURE
   postgres:
     image: postgres:16-alpine
-    container_name: notification-postgres
+    container_name: herald-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USERNAME}
@@ -14,7 +14,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - notification-net
+      - herald-net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d notification_db"]
       interval: 10s
@@ -23,7 +23,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3.13-management-alpine
-    container_name: notification-rabbitmq
+    container_name: herald-rabbitmq
     restart: unless-stopped
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
@@ -34,7 +34,7 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
-      - notification-net
+      - herald-net
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
       interval: 10s
@@ -42,72 +42,94 @@ services:
       retries: 5
 
 # APPLICATIONS
-  notification-gateway:
+  herald-gateway:
     build:
       context: .
-      dockerfile: notification-gateway/Dockerfile
-    container_name: notification-gateway
+      dockerfile: herald-gateway/Dockerfile
+    container_name: herald-gateway
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      # Overrides application.properties configuration
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/notification_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      # Overrides application.yaml configuration
+      SPRING_DATASOURCE_URL: ${GATEWAY_DB_HOST}
+      SPRING_DATASOURCE_USERNAME: ${GATEWAY_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${GATEWAY_DB_PASSWORD}
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_USERNAME: ${DB_USERNAME}
       SPRING_RABBITMQ_PASSWORD: ${DB_PASSWORD}
     ports:
       - "8080:8080"
     networks:
-      - notificatino-net
+      - herald-net
     depends_on:
       postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
 
-  notification-service:
+  herald-service:
     build:
       context: .
-      dockerfile: notification-service/Dockerfile
-    container_name: notification-service
+      dockerfile: herald-service/Dockerfile
+    container_name: herald-service
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/notification_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: ${SERVICE_DB_HOST}
+      SPRING_DATASOURCE_USERNAME: ${SERVICE_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SERVICE_DB_PASSWORD}
       SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_USERNAME: ${DB_USERNAME}
-      SPRING_RABBITMQ_PASSWORD: ${DB_PASSWORD}
+      SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_USERNAME}
     networks:
-      - notification-net
+      - herald-net
     depends_on:
       postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
 
-  notification-scheduler:
+  herald-scheduler:
     build:
       context: .
-      dockerfile: notification-scheduler/Dockerfile
-    container_name: notification-scheduler
+      dockerfile: herald-scheduler/Dockerfile
+    container_name: herald-scheduler
     restart: unless-stopped
     env_file:
       - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/notification_db
-      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: ${SCHEDULER_DB_HOST}
+      SPRING_DATASOURCE_USERNAME: ${SCHEDULER_DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SCHEDULER_DB_PASSWORD}
       SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_USERNAME: ${DB_USERNAME}
-      SPRING_RABBITMQ_PASSWORD: ${DB_PASSWORD}
+      SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_USERNAME}
     networks:
-      notification-net
+      - herald-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  herald-auth:
+    build:
+      context: .
+      dockerfile: herald-auth/Dockerfile
+    container_name: herald-auth
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: ${AUTH_DB_HOST}
+      SPRING_DATASOURCE_USERNAME: ${AUTH_DB_PASSWORD}
+      SPRING_DATASOURCE_PASSWORD: ${AUTH_DB_PASSWORD}
+      SECURITY_INTERNAL-KEY: ${AUTH_INTERNAL_KEY}
+      SECURITY_ENCRYPTION-KEY: ${AUTH_ENCRYPTION_KEY}
+    networks:
+      - herald-net
     depends_on:
       postgres:
         condition: service_healthy
@@ -121,6 +143,6 @@ volumes:
 
 # NETWORKS
 networks:
-  notification-net:
+  herald-net:
     driver: brigde
 
