@@ -22,42 +22,39 @@ Each microservice is entirely decoupled and can be deployed independently:
 * **herald-shared:** A internal Maven library shared across services. It contains common domain models, DTOs, and exception definitions, avoiding code duplication across the system. It is not a deployable service — it is packaged and installed locally as a dependency during the build process.
 
 ```mermaid
----
-config:
-  layout: elk
----
 flowchart LR
- subgraph Sistema_Herald["System processing"]
-        Auth["herald-auth"]
-        GW["herald-gateway"]
-        Service["herald-service"]
-        Sched["herald-scheduler"]
-        DB_S[("PostgreSQL")]
-        RMQ{"RabbitMQ"}
-        DB_V[("PostgreSQL")]
-        Channel["Check channel"]
-  end
-    User(("Client")) -- Request --> GW
-    GW -- "1. Auth Check" --> Auth
-    Auth -- "2a. Direct" --> Service
-    Auth -- "2b. Schedule" --> Sched
-    Sched -- "3b. Persist" --> DB_S
-    Service -- "3a. Publish" --> RMQ
-    Sched -- "4b. Polling & Publish" --> RMQ
-    RMQ -- "5. Consume" --> Service
-    Service -- "4a. Persist" --> DB_V
-    Service -- "6. Send" --> Channel
-    Channel -- 7a. SMTP --> Email["Email Service"]
-    Channel -- 7b. Bot API --> TG["Telegram API"]
+    %% Definição de Estilos
+    classDef service fill:#2c3e50,color:#fff,stroke:#000,stroke-width:2px;
+    classDef infra fill:#f9f,stroke:#333,stroke-width:2px;
 
-     Auth:::service
-     GW:::service
-     Service:::service
-     Sched:::service
-     DB_S:::infra
-     RMQ:::infra
-     DB_V:::infra
-     Channel:::service
+    User(("Client")) -- "Request" --> GW
+
+    subgraph Sistema_Herald ["System Processing"]
+        direction LR
+        GW["herald-gateway"] -- "1. Auth Check" --> Auth["herald-auth"]
+        
+        %% Caminhos de Decisão
+        Auth -- "2a. Direct" --> Service["herald-service"]
+        Auth -- "2b. Schedule" --> Sched["herald-scheduler"]
+        
+        %% Persistência e Mensageria
+        Sched -- "3b. Persist" --> DB_S[("PostgreSQL")]
+        Service -- "3a. Publish" --> RMQ{"RabbitMQ"}
+        Sched -- "4b. Polling & Publish" --> RMQ
+        
+        %% Consumo e Saída
+        RMQ -- "5. Consume" --> Service
+        Service -- "4a. Persist" --> DB_V[("PostgreSQL")]
+        Service -- "6. Send" --> Channel["Check channel"]
+    end
+
+    %% Saídas Externas
+    Channel -- "7a. SMTP" --> Email["Email Service"]
+    Channel -- "7b. Bot API" --> TG["Telegram API"]
+
+    %% Aplicação de Estilos
+    class Auth,GW,Service,Sched,Channel service
+    class DB_S,RMQ,DB_V infra
 ```
 
 ## 🧠 Architecture Evolution
