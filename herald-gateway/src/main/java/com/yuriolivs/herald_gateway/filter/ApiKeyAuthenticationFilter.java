@@ -36,6 +36,10 @@ public class    ApiKeyAuthenticationFilter implements GlobalFilter {
             return exchange.getResponse().setComplete();
         }
 
+        ServerWebExchange mutatedExchange = exchange.mutate()
+                .request(r -> r.header("X-Tenant-Id", tenantId.toString()))
+                .build();
+
         return chain.filter(exchange);
     }
 }
