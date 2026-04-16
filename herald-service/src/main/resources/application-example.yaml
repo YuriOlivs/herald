@@ -3,9 +3,9 @@ spring:
     name: herald-service
 
   datasource:
-    url:
-    username:
-    password:
+    url: ""
+    username: ""
+    password: ""
 
   jpa:
     hibernate:
@@ -19,8 +19,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username:
-    password:
+    username: ""
+    password: ""
     properties:
       mail:
         smtp:
@@ -32,8 +32,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username:
-    password:
+    username: ""
+    password: ""
 
 springdoc:
   api-docs:
@@ -47,14 +47,14 @@ server:
 
 mail:
   from:
-    address:
-    name:
+    address: ""
+    name: ""
 
 telegram:
   config:
     apiUrl: https://api.telegram.org/bot
-    token:
+    token: ""
 
 security:
-  internal-key:
-  encryption-key:
+  internal-key: ""
+  encryption-key: ""

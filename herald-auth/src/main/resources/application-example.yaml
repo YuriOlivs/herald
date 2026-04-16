@@ -3,9 +3,9 @@ spring:
     name: herald-auth
 
   datasource:
-    url:
-    username:
-    password:
+    url: ""
+    username: ""
+    password: ""
 
   jpa:
     hibernate:
@@ -20,5 +20,5 @@ server:
   port: 8084
 
 security:
-  internal-key:
-  encryption-key:
+  internal-key: ""
+  encryption-key: ""
