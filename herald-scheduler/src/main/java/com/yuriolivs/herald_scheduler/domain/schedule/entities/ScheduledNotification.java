@@ -47,6 +47,8 @@ public class ScheduledNotification {
 
     private LocalDateTime scheduledAt;
 
+    private UUID tenantId;
+
     public ScheduledNotification(
             String idempotencyKey,
             UUID notificationId,
@@ -54,7 +56,8 @@ public class ScheduledNotification {
             NotificationChannel channel,
             Boolean isActive,
             ScheduleStatus status,
-            LocalDateTime scheduledAt
+            LocalDateTime scheduledAt,
+            UUID tenantId
     ) {
         this.idempotencyKey = idempotencyKey;
         this.notificationId = notificationId;
@@ -63,5 +66,6 @@ public class ScheduledNotification {
         this.isActive = isActive;
         this.status = status;
         this.scheduledAt = scheduledAt;
+        this.tenantId = tenantId;
     }
 }

@@ -1,5 +1,6 @@
 package com.yuriolivs.herald_scheduler.service;
 
+import com.yuriolivs.herald_scheduler.client.NotificationClient;
 import com.yuriolivs.notification.shared.domain.notification.NotificationMessage;
 import com.yuriolivs.notification.shared.domain.notification.dto.NotificationResponseDTO;
 import com.yuriolivs.notification.shared.domain.notification.enums.NotificationPriority;
@@ -31,8 +32,6 @@ public class SchedulerService implements SchedulerServiceInterface {
     @Autowired
     private final NotificationClient client;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
     public ScheduledNotification findScheduledNotification(UUID id) {
         Optional<ScheduledNotification> existing = repo.findById(id);
@@ -42,7 +41,7 @@ public class SchedulerService implements SchedulerServiceInterface {
     }
 
     @Override
-    public ScheduledNotification scheduleMessage(ScheduleRequestDTO dto) {
+    public ScheduledNotification scheduleMessage(ScheduleRequestDTO dto, UUID tenantId) {
         Optional<ScheduledNotification> existing = repo.findByIdempotencyKey(dto.idempotencyKey());
         if (existing.isPresent())
             return existing.get();
@@ -58,7 +57,8 @@ public class SchedulerService implements SchedulerServiceInterface {
                     savedNotification.channel(),
                     true,
                     ScheduleStatus.SCHEDULED,
-                    dto.dateTime()
+                    dto.dateTime(),
+                    tenantId
             );
 
             return repo.save(scheduledNotification);

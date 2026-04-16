@@ -29,9 +29,10 @@ public class SchedulerController {
 
     @PostMapping
     public ResponseEntity<ScheduleResponseDTO> scheduleMessage(
-            @RequestBody @Valid ScheduleRequestDTO dto
-            ) {
-        ScheduledNotification response = service.scheduleMessage(dto);
+            @RequestBody @Valid ScheduleRequestDTO dto,
+            @RequestHeader("X-Tenant-Id") UUID tenantId
+    ) {
+        ScheduledNotification response = service.scheduleMessage(dto, tenantId);
         return ResponseEntity.ok(ScheduleResponseDTO.from(response));
     }
 
