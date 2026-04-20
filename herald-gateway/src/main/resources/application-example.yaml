@@ -2,5 +2,5 @@ spring:
   application:
     name: herald-gateway
 
-gateway:
-  api-key:
+auth:
+  internal-key: ""

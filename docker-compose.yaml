@@ -29,7 +29,7 @@ services:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
       RABBITMQ_DEFAULT_PASSWORD: ${RABBITMQ_PASSWORD}
     ports:
-      - "5672:6572"
+      - "5672:5672"
       - "15672:15672"
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
@@ -52,21 +52,14 @@ services:
       - .env
     environment:
       # Overrides application.yaml configuration
-      SPRING_DATASOURCE_URL: ${GATEWAY_DB_HOST}
-      SPRING_DATASOURCE_USERNAME: ${GATEWAY_DB_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${GATEWAY_DB_PASSWORD}
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_USERNAME: ${DB_USERNAME}
-      SPRING_RABBITMQ_PASSWORD: ${DB_PASSWORD}
+      AUTH_INTERNAL_KEY: ${AUTH_INTERNAL_KEY}
     ports:
       - "8080:8080"
     networks:
       - herald-net
     depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      herald-auth:
+        condition: service_started
 
   herald-service:
     build:
@@ -82,7 +75,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${SERVICE_DB_PASSWORD}
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
-      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_USERNAME}
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
     networks:
       - herald-net
     depends_on:
@@ -105,7 +98,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${SCHEDULER_DB_PASSWORD}
       SPRING_RABBITMQ_HOST: rabbitmq
       SPRING_RABBITMQ_USERNAME: ${RABBITMQ_USERNAME}
-      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_USERNAME}
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
     networks:
       - herald-net
     depends_on:
@@ -124,16 +117,14 @@ services:
       - .env
     environment:
       SPRING_DATASOURCE_URL: ${AUTH_DB_HOST}
-      SPRING_DATASOURCE_USERNAME: ${AUTH_DB_PASSWORD}
+      SPRING_DATASOURCE_USERNAME: ${AUTH_DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${AUTH_DB_PASSWORD}
-      SECURITY_INTERNAL-KEY: ${AUTH_INTERNAL_KEY}
-      SECURITY_ENCRYPTION-KEY: ${AUTH_ENCRYPTION_KEY}
+      SECURITY_INTERNAL_KEY: ${AUTH_INTERNAL_KEY}
+      SECURITY_ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY}
     networks:
       - herald-net
     depends_on:
       postgres:
-        condition: service_healthy
-      rabbitmq:
         condition: service_healthy
 
 # VOLUMES
@@ -144,5 +135,5 @@ volumes:
 # NETWORKS
 networks:
   herald-net:
-    driver: brigde
+    driver: bridge
 
