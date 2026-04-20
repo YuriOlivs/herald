@@ -23,7 +23,7 @@ Each microservice is entirely decoupled and can be deployed independently:
 
 #### Application flow diagram
 ![Herald flow diagram](herald-flow-diagram.svg)
-(Open image in a new to take a better look) 
+(Open image in a new tab to take a better look) 
 ## 🧠 Architecture Evolution
 
 This project was originally designed as a multi-repository microservices system, where each service was maintained in its own repository.
