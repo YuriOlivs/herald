@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: herald-auth
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/herald_auth_db
+    username: admin
+    password: admin
+
+server:
+  port: 8084
+
+security:
+  internal-key: ${AUTH_SECURITY_INTERNAL_KEY}
+  encryption-key: ${AUTH_SECURITY_ENCRYPTION_KEY}
