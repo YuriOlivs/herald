@@ -28,6 +28,21 @@ public class RoutingConfig {
                         .path("/webhooks/**")
                         .uri(routes.getWebhooks())
                 )
+                .route("auth-docs", r -> r
+                        .path("/v3/api-docs/auth")
+                        .filters(f -> f.rewritePath("/v3/api-docs/auth", "/v3/api-docs"))
+                        .uri(routes.getAuth())
+                )
+                .route("service-docs", r -> r
+                        .path("/v3/api-docs/service")
+                        .filters(f -> f.rewritePath("/v3/api-docs/service", "/v3/api-docs"))
+                        .uri(routes.getService())
+                )
+                .route("scheduler-docs", r -> r
+                        .path("/v3/api-docs/scheduler")
+                        .filters(f -> f.rewritePath("/v3/api-docs/scheduler", "/v3/api-docs"))
+                        .uri(routes.getScheduler())
+                )
                 .build();
     }
 }
