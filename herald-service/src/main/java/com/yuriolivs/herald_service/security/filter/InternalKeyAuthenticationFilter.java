@@ -37,6 +37,9 @@ public class InternalKeyAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return !path.contains("/internal");
+        return  !path.contains("/internal") ||
+                !path.startsWith("/notifications") ||
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs");
     }
 }

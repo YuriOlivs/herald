@@ -6,6 +6,7 @@ import com.yuriolivs.notification.shared.domain.schedule.dto.SchedulePayloadRequ
 import com.yuriolivs.notification.shared.domain.schedule.dto.ScheduledPayloadResponseDTO;
 import com.yuriolivs.herald_scheduler.config.properties.SecurityProperties;
 import com.yuriolivs.herald_scheduler.domain.notification.dto.NotificationRequestDTO;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 @Component
+@EnableConfigurationProperties({SecurityProperties.class, RoutingProperties.class})
 public class NotificationClient {
     private final RoutingProperties routes;
     private final RestTemplate restTemplate;
