@@ -91,6 +91,7 @@ RABBITMQ_PASSWORD=your_rabbitmq_password
 # Security
 AUTH_INTERNAL_KEY=your_internal_key
 AUTH_ENCRYPTION_KEY=your_encryption_key
+```
 
 ### Running the project
 
